@@ -61,3 +61,28 @@ check_homoscedasticity(X, y)
 print("Normality of errors test:", check_normality_of_errors(y, X))
 print("Endogeneity test:", check_endogeneity(y, X))
 print("Autocorrelation test:", check_autocorrelation(y, X))
+
+from sklearn.metrics import mean_squared_error
+
+def interpret_linear_regression(lr_model, feature_names, X_test=None, y_test=None):
+    # Coefficients
+    coef = lr_model.coef_
+    print("Coefficients:")
+    for feature, coef_ in zip(feature_names, coef):
+        print(f"{feature}: {coef_}")
+
+    # Intercept
+    intercept = lr_model.intercept_
+    print(f"\nIntercept: {intercept}")
+
+    # If test set is provided, calculate and display the Mean Squared Error (MSE)
+    if X_test is not None and y_test is not None:
+        y_pred = lr_model.predict(X_test)
+        mse = mean_squared_error(y_test, y_pred)
+        print(f"\nMean Squared Error on Test Set: {mse}")
+
+# Example usage:
+# Assuming `lr` is your trained LinearRegression model and
+# `feature_names` is a list of your feature names.
+# interpret_linear_regression(lr, feature_names)
+
