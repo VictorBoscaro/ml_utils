@@ -71,3 +71,37 @@ fig.update_layout(
 
 # Show plot
 fig.show()
+
+def permutation_test(group1, group2, n_permutations=10000):
+    """
+    Perform a permutation test to compare means between two groups.
+    
+    Parameters:
+    - group1: np.array, first group of data
+    - group2: np.array, second group of data
+    - n_permutations: int, number of permutations
+    
+    Returns:
+    - p_value: float, p-value of the test
+    """
+    
+    # Observed difference in means
+    obs_diff = np.mean(group2) - np.mean(group1)
+    
+    # Combine the two datasets
+    combined = np.concatenate([group1, group2])
+    
+    # Perform permutation test
+    extreme_count = 0
+    for _ in range(n_permutations):
+        np.random.shuffle(combined)
+        new_group1 = combined[:len(group1)]
+        new_group2 = combined[len(group1):]
+        new_diff = np.mean(new_group2) - np.mean(new_group1)
+        
+        if new_diff >= obs_diff:
+            extreme_count += 1
+    
+    # Calculate p-value
+    p_value = extreme_count / n_permutations
+    return p_value
